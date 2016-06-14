@@ -1,0 +1,23 @@
+trigger CheckContactsize on Account (after insert,before update) 
+{
+set<string>AccId = new set<string>();
+ for(Account Acc :trigger.new)
+{
+    If(Acc.Email__C!=null)
+    {
+    AccId.add(Acc.Email__C);
+    System.debug('@@@@@@@@@@ AccId @@@@@@@@@'+AccId);
+    }
+ }
+ 
+Map<id,contact>ConMap = new Map<id,contact>([SELECT id,name,Email from contact WHERE ID IN:AccId]);
+for(Account ac :trigger.New)
+{
+     if(ac.Email__c!=null)
+     {
+     contact c =ConMap.get(ac.Email__c);
+     c.Email=Ac.Email__c;
+     }
+}
+     
+}
